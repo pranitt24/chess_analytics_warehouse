@@ -1,0 +1,25 @@
+﻿# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Data (too large for git)
+data/raw/*
+!data/raw/.gitkeep
+*.pgn
+
+# Models
+mining/models/*.pkl
+mining/models/*.joblib
+
+# Environment
+.env
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# OS/editor
+.DS_Store
