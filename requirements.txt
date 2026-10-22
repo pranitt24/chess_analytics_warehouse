@@ -1,0 +1,12 @@
+# Pinned to the versions installed in the project's .venv (Python 3.12.10)
+numpy==2.5.4
+pandas==3.0.6
+scipy==1.18.1
+scikit-learn==1.9.1
+mlxtend==0.25.0
+chess==1.11.2
+psycopg2-binary==2.9.13
+
+# Added at Phase J (FastAPI backend):
+# fastapi
+# uvicorn[standard]

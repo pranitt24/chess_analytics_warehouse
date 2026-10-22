@@ -1,0 +1,1 @@
+{"rows": [{"variable": "white_elo", "count": 954527, "mean": 1654.2, "std": 301.1, "min": 712, "q1": 1440, "median": 1650, "q3": 1860, "max": 3074}, {"variable": "plies", "count": 954527, "mean": 71.3, "std": 33, "min": 10, "q1": 47, "median": 67, "q3": 91, "max": 430}]}
