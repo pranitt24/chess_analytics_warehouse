@@ -50,11 +50,11 @@ function Olap(){const [op,setOp]=useState('rollup');const [p,setP]=useState(OPS.
   const q=new URLSearchParams(p).toString();
   return <><div className="ops">{Object.keys(OPS).map(o=><button key={o} className={'nb'+(o===op?' on':'')} onClick={()=>pick(o)}>{o==='rollup'?'Roll-up':o==='drilldown'?'Drill-down':o[0].toUpperCase()+o.slice(1)}</button>)}</div>
     <div className="ctl">{Object.entries(p).map(([k,v])=><label key={k}>{k}<input value={v} onChange={e=>setP({...p,[k]:e.target.value})}/></label>)}</div>
-    <Load path={`/api/olap/${op}?${q}`}>{d=>{const ch=d.chart,ok=ch&&ch.type!=='none'&&ch.type!=='heatmap';return <>
+    <Load path={`/api/olap/${op}?${q}`}>{d=>{const ch=d.chart,ok=ch&&ch.type!=='none'&&ch.type!=='heatmap',cr=d.rows.filter(r=>!r.is_total);return <>
       <P t={d.title} cap={d.note}>
         <div className="meta"><span className="badge">{d.elapsed_ms} ms</span><button className="lnk" onClick={()=>setSql(!sql)}>{sql?'Hide SQL':'Show SQL'}</button></div>
         {sql&&<pre className="code">{d.sql}</pre>}
-        {ok&&<Chart cfg={{type:ch.type==='line'?'line':'bar',data:{labels:d.rows.map(r=>r[ch.x]),datasets:ch.series.map((s,i)=>({label:s,data:d.rows.map(r=>r[s]),backgroundColor:PAL[i%6],borderColor:PAL[i%6],pointStyle:SHAPE[i%6]}))},
+        {ok&&<Chart cfg={{type:ch.type==='line'?'line':'bar',data:{labels:cr.map(r=>r[ch.x]),datasets:ch.series.map((s,i)=>({label:s,data:cr.map(r=>r[s]),backgroundColor:PAL[i%6],borderColor:PAL[i%6],pointStyle:SHAPE[i%6]}))},
           options:{...ax(ch.x,'Value'),scales:{x:{stacked:ch.type==='stacked_bar'},y:{stacked:ch.type==='stacked_bar'}}}}}/>}</P>
       <P t="Result table" cap="Click a header to sort. Greyed rows have n < 30."><T cols={d.columns} rows={d.rows}/></P></>}}</Load></>}
 

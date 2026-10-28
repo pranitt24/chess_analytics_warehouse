@@ -52,7 +52,7 @@ CHECKS = [
         WHERE split_part(s.stratum, '|', 1) <> t.category"""),
     ("5. Rows per year and tier", """
         SELECT t.year, f.analysis_tier AS tier, count(*) AS games,
-               round(sum(f.sample_weight)::numeric, 0) AS est_population_games
+               round(sum(f.sample_weight::float8)::numeric, 0) AS est_population_games
         FROM game_fact f JOIN dim_time t USING (date_key)
         GROUP BY t.year, f.analysis_tier ORDER BY t.year, tier"""),
     ("6. Null / availability rates by year (matches Phase B expectations?)", """
@@ -66,13 +66,13 @@ CHECKS = [
     ("7. Time-control mix: sample vs weighted estimate of the population", """
         SELECT tc.category, count(*) AS sample_games,
                round(100.0 * count(*) / sum(count(*)) OVER (), 1) AS sample_pct,
-               round((100.0 * sum(f.sample_weight) / sum(sum(f.sample_weight)) OVER ())::numeric, 1) AS weighted_pct
+               round((100.0 * sum(f.sample_weight::float8) / sum(sum(f.sample_weight::float8)) OVER ())::numeric, 1) AS weighted_pct
         FROM game_fact f JOIN dim_timecontrol tc USING (tc_key)
         GROUP BY tc.category ORDER BY sample_games DESC"""),
     ("8. Sanity: White score by time control (expect roughly 0.50 to 0.55; weighted removes sampling skew)", """
         SELECT tc.category, count(*) AS games,
                round(avg(f.white_score)::numeric, 3) AS white_score_unweighted,
-               round((sum(f.white_score * f.sample_weight) / sum(f.sample_weight))::numeric, 3) AS white_score_weighted
+               round((sum(f.white_score * f.sample_weight::float8) / sum(f.sample_weight::float8))::numeric, 3) AS white_score_weighted
         FROM game_fact f JOIN dim_timecontrol tc USING (tc_key)
         GROUP BY tc.category ORDER BY tc.category"""),
     ("9. Sanity: plies and Elo ranges (no impossible values)", """
